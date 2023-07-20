@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="board" id="board">
+        <!-- Add cells dynamically using JavaScript -->
+    </div>
+    <div class="message" id="message"></div>
+
+    <script>
+        // JavaScript code for Tic Tac Toe game
+        let board = [[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]];
+        let players = ["X", "O"];
+        let turn = 0;
+        let gameEnded = false;
+
+        function printBoard() {
+            let boardDiv = document.getElementById("board");
+            boardDiv.innerHTML = "";
+
+            for (let row = 0; row < 3; row++) {
+                for (let col = 0; col < 3; col++) {
+                    let cell = document.createElement("div");
+                    cell.classList.add("cell");
+                    cell.innerText = board[row][col];
+                    cell.setAttribute("onclick", `makeMove(${row}, ${col})`);
+                    boardDiv.appendChild(cell);
+                }
+            }
+        }
+
+        function checkWinner(player) {
+            for (let i = 0; i < 3; i++) {
+                if (board[i][0] === player && board[i][1] === player && board[i][2] === player) {
+                    return true;
+                }
+                if (board[0][i] === player && board[1][i] === player && board[2][i] === player) {
+                    return true;
+                }
+            }
+            if (board[0][0] === player && board[1][1] === player && board[2][2] === player) {
+                return true;
+            }
+            if (board[0][2] === player && board[1][1] === player && board[2][0] === player) {
+                return true;
+            }
+            return false;
+        }
+
+        function makeMove(row, col) {
+            if (!gameEnded && board[row][col] === " ") {
+                let currentPlayer = players[turn % 2];
+                board[row][col] = currentPlayer;
+                printBoard();
+
+                if (checkWinner(currentPlayer)) {
+                    let message = document.getElementById("message");
+                    message.innerText = `Player ${currentPlayer} wins!`;
+                    gameEnded = true;
+                } else if (turn === 8) {
+                    let message = document.getElementById("message");
+                    message.innerText = "It's a draw!";
+                    gameEnded = true;
+                }
+
+                turn++;
+            }
+        }
+
+        // Initial setup
+        printBoard();
+    </script>
+</body>
+</html>
